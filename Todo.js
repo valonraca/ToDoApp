@@ -3,6 +3,9 @@ class TodoManager {
         this.tasks = [];
     }
 
+    rendering() {
+        console.log("What a beautiful day to code!");
+    }
     // Method to add tasks AND validate input
     addTask(description) {
         if (description && description.length > 3) {
