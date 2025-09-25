@@ -1,43 +1,43 @@
+// A single class that has grown to handle too many things.
 class TodoManager {
     constructor() {
         this.tasks = [];
+        this.storage = new LocalStorageHandler(); 
     }
 
-    // Method to add tasks AND validate input
-    addTask(description) {
-        if (description && description.length > 3) {
-            const task = {
-                id: Math.random(),
-                desc: description,
-                completed: false
-            };
-            this.tasks.push(task);
-            console.log(`DATABASE: Saving task '${description}'`);
-            return true;
+    addTask(description, type = 'simple') {
+        let task = { id: Date.now(), desc: description, completed: false };
+
+        if (type === 'urgent') {
+            task.priority = 'high';
+            task.desc = `[URGENT] ${description}`;
         } else {
-            console.log("VALIDATION: Description is too short.");
-            return false;
-            
+            task.priority = 'normal';
         }
+
+        this.tasks.push(task);
+        this.storage.save(this.tasks);
+        this.renderTasks(); 
+        return true;
     }
 
-    // Method to print tasks to the console
-    displayTasks() {
-        console.log("--- TODO LIST ---");
-        this.tasks.forEach(task => {
-            if (!task.completed) {
-                console.log(`[ ] ${task.desc}`);
-            }
-        });
-    }
+    renderTasks() {
+        const container = document.getElementById('task-container');
+        if (!container) return;
 
-    // A separate method to print completed tasks
-    displayCompletedTasks() {
-        console.log("--- COMPLETED ---");
+        let html = '<ul>';
         this.tasks.forEach(task => {
-            if (task.completed) {
-                console.log(`[x] ${task.desc}`);
-            }
+            const style = task.completed ? 'text-decoration: line-through;' : '';
+            html += `<li style="${style}">${task.desc}</li>`;
         });
+        html += '</ul>';
+
+        container.innerHTML = html;
+    }
+}
+
+class LocalStorageHandler {
+    save(data) {
+        console.log("SAVING to Local Storage:", data);
     }
 }
