@@ -17,6 +17,7 @@ class TodoManager {
         } else {
             console.log("VALIDATION: Description is too short.");
             return false;
+            
         }
     }
 
