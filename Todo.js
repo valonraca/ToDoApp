@@ -6,6 +6,7 @@ class TodoManager {
     // Method to add tasks AND validate input
     addTask(description) {
         if (description && description.length > 3) {
+            
             const task = {
                 id: Math.random(),
                 desc: description,
